@@ -135,6 +135,13 @@ class BaseRunner(metaclass=ABCMeta):
         # TODO: Redesign LogBuffer, it is not flexible and elegant enough
         self.log_buffer = LogBuffer()
 
+        # epoch freeze
+        self.jump = 5
+        self.layername = {
+        'input_encoder': False,
+        'ResNet3dPathway': True
+        }
+
     @property
     def model_name(self):
         """str: Name of the model, usually the module class name."""

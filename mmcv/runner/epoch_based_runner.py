@@ -20,6 +20,33 @@ class EpochBasedRunner(BaseRunner):
 
     This runner train models epoch by epoch.
     """
+    def selective_freeze(self, jump, layername):
+        """
+        Jump: int
+            the n number of epochs which part should be frozen.
+        layername: dict
+            the dict holds the name and status if they are frozen.
+        """
+
+        # check and toggle the status.
+        # get current epoch
+        if self._epoch % jump == 0:
+            for key, value in layername.items():
+                if key == 'input_encoder' and value == False:
+                    for param in self.model.input_encoder.parameters():
+                        param.requires_grad = True
+                    for param in self.model.ResNet3dPathway.parameters():
+                        param.requires_grad = False
+                    layername['input_encoder'] = True
+                    layername['ResNet3dPathway'] = False
+                if key == "ResNet3dPathway" and value == False:
+                    for param in self.model.input_encoder.parameters():
+                        param.requires_grad = False
+                    for param in self.model.ResNet3dPathway.parameters():
+                        param.requires_grad = True
+                    layername['input_encoder'] = False
+                    layername['ResNet3dPathway'] = True
+        return layername
 
     def run_iter(self, data_batch, train_mode, **kwargs):
         if self.batch_processor is not None:
@@ -53,6 +80,9 @@ class EpochBasedRunner(BaseRunner):
 
         self.call_hook('after_train_epoch')
         self._epoch += 1
+
+        # check which stream to freeze
+        self.selective_freeze(self.jump, self.layername)
 
     @torch.no_grad()
     def val(self, data_loader, **kwargs):

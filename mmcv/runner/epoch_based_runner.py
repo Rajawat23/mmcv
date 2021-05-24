@@ -33,16 +33,16 @@ class EpochBasedRunner(BaseRunner):
         if self._epoch % jump == 0:
             for key, value in layername.items():
                 if key == 'input_encoder' and value == False:
-                    for param in self.model.module.input_encoder.parameters():
+                    for param in self.model.module.TwoStreamDSPN.ResNetDSPN3dPathway.parameters():
                         param.requires_grad = True
-                    for param in self.model.module.ResNet3dPathway.parameters():
+                    for param in self.model.module.TwoStreamDSPN.ResNet3dPathway.parameters():
                         param.requires_grad = False
                     layername['input_encoder'] = True
                     layername['ResNet3dPathway'] = False
                 if key == "ResNet3dPathway" and value == False:
-                    for param in self.model.module.input_encoder.parameters():
+                    for param in self.model.module.TwoStreamDSPN.ResNetDSPN3dPathway.parameters():
                         param.requires_grad = False
-                    for param in self.model.module.ResNet3dPathway.parameters():
+                    for param in self.model.module.TwoStreamDSPN.ResNet3dPathway.parameters():
                         param.requires_grad = True
                     layername['input_encoder'] = False
                     layername['ResNet3dPathway'] = True

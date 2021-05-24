@@ -136,7 +136,7 @@ class BaseRunner(metaclass=ABCMeta):
         self.log_buffer = LogBuffer()
 
         # epoch freeze
-        self.jump = 1
+        self.jump = 5
         self.layername = {
         'input_encoder': False,
         'ResNet3dPathway': True

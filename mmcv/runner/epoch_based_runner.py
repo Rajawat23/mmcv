@@ -82,7 +82,8 @@ class EpochBasedRunner(BaseRunner):
         self._epoch += 1
 
         # check which stream to freeze
-        self.selective_freeze(self.jump, self.layername)
+        if self.selective_freeze:
+            self.selective_freeze(self.jump, self.layername)
 
     @torch.no_grad()
     def val(self, data_loader, **kwargs):

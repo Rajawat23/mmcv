@@ -56,7 +56,8 @@ class BaseRunner(metaclass=ABCMeta):
                  logger=None,
                  meta=None,
                  max_iters=None,
-                 max_epochs=None):
+                 max_epochs=None,
+                 selective_freeze=False):
         if batch_processor is not None:
             if not callable(batch_processor):
                 raise TypeError('batch_processor must be callable, '
@@ -141,6 +142,7 @@ class BaseRunner(metaclass=ABCMeta):
         'input_encoder': False,
         'ResNet3dPathway': True
         }
+        self.selective_freeze = selective_freeze
 
     @property
     def model_name(self):

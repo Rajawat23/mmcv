@@ -20,7 +20,7 @@ class EpochBasedRunner(BaseRunner):
 
     This runner train models epoch by epoch.
     """
-    def selective_freeze(self, jump, layername):
+    def selective_freeze_func(self, jump, layername):
         """
         Jump: int
             the n number of epochs which part should be frozen.
@@ -83,7 +83,7 @@ class EpochBasedRunner(BaseRunner):
 
         # check which stream to freeze
         if self.selective_freeze:
-            self.selective_freeze(self.jump, self.layername)
+            self.selective_freeze_func(self.jump, self.layername)
 
     @torch.no_grad()
     def val(self, data_loader, **kwargs):
